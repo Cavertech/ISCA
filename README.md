@@ -52,12 +52,3 @@ v2.0.0 | web portal to configure
 
 
 
-
-
-
-# Tags
-#opensource 
-#scanner
-#securitytool
-#start-ups 
-#product_research 
