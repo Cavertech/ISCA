@@ -24,7 +24,7 @@ Check if compliance needs are met.
 - Pulumi
 - Serverless Framework
 - Crossplane
-- Knative
+
 
 ## ISCA Roadmap
 | Release | Feature |
