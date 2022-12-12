@@ -49,6 +49,7 @@ v2.0.0 | Django Interface
 v2.0.0| web portal for report viewing 
 v2.0.0 | web portal to configure 
 
-
+## CODE OF CONDUCT
+We Belive our community should be truly open for everyone.As such, we are commited to providing a friendly,safe and welcomig enviroment for all, regadless of gender, sexual orientation, disabitiy, ethincity or religion.
 
 
