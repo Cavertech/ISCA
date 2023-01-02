@@ -9,5 +9,7 @@ import (
 
 func main() {
 	fmt.Println(welcome.WelcomeMesaage())
-	fmt.Println(filescanner.PathFinder())
+	filescanner.ProjectName = "GoLang"
+	fmt.Println("Started")
+	filescanner.StartFileScanner()
 }
