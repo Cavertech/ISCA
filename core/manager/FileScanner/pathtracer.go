@@ -9,15 +9,15 @@ import (
 	"path/filepath"
 )
 
-type ProjectInfo struct {
+var (
 	ProjectName string
-	ScanDir     string
-	TempDIr     string
-}
+	scandir     string = "./core/scan_engine /scan_dir"
+	reportdir   string = "./core/scan_engine /"
+)
 
-func PathFinder() string {
+func PathFinder() {
 	// Get the Absolute path of the defualt scan dir
-	ScanDir, erro := filepath.Abs("./core/scan_engine /scan_dir")
+	ScanDir, erro := filepath.Abs(scandir)
 	if erro != nil {
 		log.Fatal(erro)
 	}
@@ -47,25 +47,53 @@ func PathFinder() string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var data string
-	for _, file := range FilePaths {
-		data = file
-	}
-	return data
+	WriteFilePath(FilePaths, "FilePaths")
+
 }
 
 // Create & write to a file.
-func WriteFilePath(lines []string) {
-	PathList, error := os.CreateTemp()
+// parr slice string := filepaths
+// parr string := Report patters for generating tempalets
+func WriteFilePath(lines []string, ReportPattern string) {
+	reportdir := fmt.Sprintf("%s/%s/Reports", reportdir, ProjectName)
+	pattern := fmt.Sprintf("%s-%s", ProjectName, ReportPattern)
+	PathList, error := os.CreateTemp(reportdir, pattern)
 	if error != nil {
 		log.Fatal(error)
 		return
 	}
+	defer PathList.Close()
+
+	for _, val := range lines {
+		_, writeError := fmt.Fprintln(PathList, val)
+		if writeError != nil {
+			log.Fatal(writeError)
+			return
+		}
+	}
 
 }
 
-func (pi ProjectInfo) getInfo(data string) {
-	pi.ProjectName = data
-	pi.ScanDir = "./core/scan_engine /scan_dir/"
-	pi.TempDIr = fmt.Sprintf("./core/scan_engine /scan_dir/Reports/%s", pi.ProjectName)
+// Create a Dir Structure of the projects. The project name is passed as a parameter
+func CreateDirStr(DirName string) string {
+	root, erro := filepath.Abs(reportdir)
+	if erro != nil {
+		log.Fatal(erro)
+	}
+	dirCreate := fmt.Sprintf("%s/%s/Reports", root, scandir)
+	fmt.Println(dirCreate)
+	if err := os.MkdirAll(dirCreate, os.ModePerm); err != nil {
+		log.Fatal(err)
+	}
+	return "pass"
+}
+
+func StartFileScanner() {
+	//Start by creating Dir Stuct
+	CreateDirStr(ProjectName)
+	fmt.Println("Completed creating Dir structure")
+	fmt.Println("Started Pathfinder")
+	PathFinder()
+	fmt.Println("Scan compeleted")
+
 }
