@@ -3,6 +3,7 @@
 package filescanner
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,6 +12,7 @@ import (
 type ProjectInfo struct {
 	ProjectName string
 	ScanDir     string
+	TempDIr     string
 }
 
 func PathFinder() string {
@@ -50,4 +52,20 @@ func PathFinder() string {
 		data = file
 	}
 	return data
+}
+
+// Create & write to a file.
+func WriteFilePath(lines []string) {
+	PathList, error := os.CreateTemp()
+	if error != nil {
+		log.Fatal(error)
+		return
+	}
+
+}
+
+func (pi ProjectInfo) getInfo(data string) {
+	pi.ProjectName = data
+	pi.ScanDir = "./core/scan_engine /scan_dir/"
+	pi.TempDIr = fmt.Sprintf("./core/scan_engine /scan_dir/Reports/%s", pi.ProjectName)
 }
