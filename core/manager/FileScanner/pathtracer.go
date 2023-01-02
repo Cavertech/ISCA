@@ -11,8 +11,8 @@ import (
 
 var (
 	ProjectName string
-	scandir     string = "./core/scan_engine /scan_dir"
-	reportdir   string = "./core/scan_engine /"
+	scandir     string = "./core/scan_engine/scan_dir"
+	reportdir   string = "./core/scan_engine/"
 )
 
 func PathFinder() {
@@ -22,8 +22,8 @@ func PathFinder() {
 		log.Fatal(erro)
 	}
 
-	var FilePaths []string                  //collects and stores the path in a slice
-	extentions := []string{".conf", ".txt"} // list of supported file type of vailidation
+	var FilePaths []string               //collects and stores the path in a slice
+	extentions := []string{".go", ".tf"} // list of supported file type of vailidation
 
 	// travel across the dir from the root to mapout the dir structure
 	err := filepath.Walk(ScanDir, func(path string, info os.FileInfo, err error) error {
@@ -47,6 +47,10 @@ func PathFinder() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	for _, file := range FilePaths {
+		fmt.Println(file)
+
+	}
 	WriteFilePath(FilePaths, "FilePaths")
 
 }
@@ -55,7 +59,11 @@ func PathFinder() {
 // parr slice string := filepaths
 // parr string := Report patters for generating tempalets
 func WriteFilePath(lines []string, ReportPattern string) {
-	reportdir := fmt.Sprintf("%s/%s/Reports", reportdir, ProjectName)
+	ReportDirPath, erro := filepath.Abs(reportdir)
+	if erro != nil {
+		log.Fatal(erro)
+	}
+	reportdir := fmt.Sprintf("%s/%s/Reports", ReportDirPath, ProjectName)
 	pattern := fmt.Sprintf("%s-%s", ProjectName, ReportPattern)
 	PathList, error := os.CreateTemp(reportdir, pattern)
 	if error != nil {
@@ -80,7 +88,7 @@ func CreateDirStr(DirName string) string {
 	if erro != nil {
 		log.Fatal(erro)
 	}
-	dirCreate := fmt.Sprintf("%s/%s/Reports", root, scandir)
+	dirCreate := fmt.Sprintf("%s/%s/Reports", root, ProjectName)
 	fmt.Println(dirCreate)
 	if err := os.MkdirAll(dirCreate, os.ModePerm); err != nil {
 		log.Fatal(err)
@@ -88,6 +96,7 @@ func CreateDirStr(DirName string) string {
 	return "pass"
 }
 
+// Start the package
 func StartFileScanner() {
 	//Start by creating Dir Stuct
 	CreateDirStr(ProjectName)
